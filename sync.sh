@@ -5,10 +5,11 @@ if [ -z $1 ]; then
    exit 1
 fi
 
-OPTIONS="-rtlHq --delete-after --delay-updates --safe-links"
-REPO="rsync://mirrors.kernel.org/"
-DEST="/media/mirror/"
-LCK_FILE="/tmp/rsync-mirror-$1"
+OPTIONS="-rtlHqv --delete-after --delay-updates --safe-links"
+REPO="rsync://mirrors.kernel.org/$1"
+DEST="/media/mirror/$1"
+LCK_FILE="/tmp/rsync-mirror-$1.lck"
+LOG_FILE="/tmp/log-$1.log"
 
 # Make sure only 1 instance runs
 if [ -e "$LCK_FILE" ]; then
@@ -19,8 +20,7 @@ fi
 echo $$ > "$LCK_FILE"
 
 # Sync
-echo "Syncing $1"
-rsync $OPTIONS "$REPO/$1" "$DEST/$1"
+rsync $OPTIONS $REPO $DEST &> $LOG_FILE
 
 # Cleanup
 rm -f "$LCK_FLE"
