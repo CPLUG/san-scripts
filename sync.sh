@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 OPTIONS="-rtlHqv --delete-after --delay-updates --safe-links"
 REPO="rsync://mirrors.kernel.org/$1"
