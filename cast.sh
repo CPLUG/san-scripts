@@ -24,7 +24,7 @@ SOUNDCARD=pulse
 FPS=25
 
 #Directory where your video is gonna be saved.(include / at the end)
-DIRECTORY=$HOME/capture/
+DIRECTORY=$PWD
 
 #File name
 FILENAME=videocast $(date +%d%m%Y_%H.%M.%S).avi
@@ -32,11 +32,10 @@ FILENAME=videocast $(date +%d%m%Y_%H.%M.%S).avi
 #tmpdir
 TMPDIR=$(mktemp -d)
 
-# meat
 
 avconv -f "$AUDIO" -ac "$CHANNELS" -i "$SOUNDCARD" -f -b 10000k -g 300 -bf 2 -acodec libmp3lame -ab 128k -threads "$THREADS" "$TMPDIR/audio.avi"
 ffmpeg -f x11grab -r "$FPS" -s "$RESO" -i :0.0 -vcodec huffyuv -sameq $TMPDIR/screencast.avi
 ffmpeg -isync -i "$TMPDIR/audio.avi" -i "$TMPDIR/screencast.avi" -acodec mp2 -ab 192k -vcodec copy "$FILENAME"
-mv "$FILENAME" .
+mv "$FILENAME" "$PWD"
 rm -r "$TMPDIR"
 #echo "The name of your file is $FILENAME in your $PWD. \n"
